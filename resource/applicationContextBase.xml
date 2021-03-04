@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd  
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd  
+  		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+    	http://www.springframework.org/schema/mvc 
+     	http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+      	http://www.springframework.org/schema/data/mongo  
+     	http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd  
+      	http://www.springframework.org/schema/task   
+   	 	http://www.springframework.org/schema/cache   
+		http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+	<!-- MapperScannerConfigurer 属性不支持使用了 PropertyPlaceholderConfigurer 的属 性替换,因为会在 
+		Spring 其中之前来它加载。 但是,可以使用 PropertiesFactoryBean 和 SpEL 表达式来作为替代。 -->
+	<bean id="configproperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:resource.properties"></property>
+	</bean>
+	
+
+	<!-- 使用annotation 自动注册bean -->
+	<context:annotation-config />
+	<context:component-scan base-package="com*"></context:component-scan>
+	
+</beans>

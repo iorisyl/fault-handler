@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+
+    
+    <bean id="configproperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:resource.properties"></property>
+	</bean>
+	
+	<dubbo:application name="fault-handler">
+	    <dubbo:parameter key="qos.enable" value="true"/>
+	    <dubbo:parameter key="qos.accept.foreign.ip" value="false"/>
+	    <dubbo:parameter key="qos.port" value="#{configproperties.dubbo_qos_port}"/>  
+    </dubbo:application>
+ 
+    <dubbo:registry address="#{configproperties.dubbo_address}"/>
+    <!--<dubbo:registry address="multicast://224.5.6.7:1234" />-->
+    
+    <!-- 用dubbo协议在38880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="#{configproperties.dubbo_port}" payload="#{configproperties.dubbo_payload}"  threadpool="#{configproperties.dubbo_threadpool}" threads="#{configproperties.dubbo_threads}" accepts="#{configproperties.dubbo_accepts}"/>
+	<dubbo:provider timeout="#{configproperties.dubbo_client_timeout}"/>
+	
+    
+	
+</beans>

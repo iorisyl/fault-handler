@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- - Copyright 1999-2011 Alibaba Group. - - Licensed under the Apache License, 
+	Version 2.0 (the "License"); - you may not use this file except in compliance 
+	with the License. - You may obtain a copy of the License at - - http://www.apache.org/licenses/LICENSE-2.0 
+	- - Unless required by applicable law or agreed to in writing, software - 
+	distributed under the License is distributed on an "AS IS" BASIS, - WITHOUT 
+	WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. - See the 
+	License for the specific language governing permissions and - limitations 
+	under the License. -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo 
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<bean id="configproperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:resource.properties"></property>
+	</bean>
+
+	<!-- 连接注册中心配置 -->
+	<dubbo:registry address="#{configproperties.dubbo_address}" />
+	<!--<dubbo:registry address="multicast://224.5.6.7:1234" /> -->
+	<dubbo:consumer>
+		<dubbo:parameter key="timeout" value="#{configproperties.dubbo_client_timeout}" />
+		<dubbo:parameter key="connect.timeout" value="#{configproperties.dubbo_client_timeout}" />
+	</dubbo:consumer>
+	
+	
+    <!-- redis数据库的调用 -->
+    <dubbo:reference id="redisDataHandlerService" check="false" interface="com.alibaba.dubbo.data.RedisDataHandlerService" group="#{configproperties.dubbo_group}"/>
+	
+	<!-- 日志数据mongoDB维护 -->
+	<dubbo:reference id="logMongoHandlerService" check="false" interface="com.alibaba.dubbo.data.LogMongoHandlerService" group="#{configproperties.dubbo_group}" timeout="300000"/>
+	
+    <!-- 日志数据维护 -->  
+	<dubbo:reference id="logSystemHandlerService" check="false" interface="com.alibaba.dubbo.data.LogSystemHandlerService" group="#{configproperties.dubbo_group}" timeout="300000"/>
+	
+	 <!-- 基本配置  -->
+	<dubbo:reference id="baseConfigDataHandlerService" check="false" interface="com.alibaba.dubbo.data.BaseConfigDataHandlerService" group="#{configproperties.dubbo_group}" />
+	
+	<!-- kafka生产者  -->
+	<dubbo:reference id="kafkaProducerDataHandlerService" check="false" interface="com.alibaba.dubbo.data.KafkaProducerDataHandlerService" group="#{configproperties.dubbo_group}" />
+	
+	<!-- mongoDB的普通bus -->
+	<dubbo:reference id="busMongoDataHandlerService" check="false" interface="com.alibaba.dubbo.data.BusMongoDataHandlerService" group="#{configproperties.dubbo_group}" timeout="300000"/>
+	
+	<!-- 在线自动更新服务 -->
+	<dubbo:reference id="queryAndUpdateHandlerService" check="false" interface="com.alibaba.dubbo.data.QueryAndUpdateHandlerService" group="#{configproperties.dubbo_group}" />
+	
+	<!-- 召唤数据逻辑入库查库逻辑 -->
+	<dubbo:reference id="callDataLogicService" check="false" interface="com.alibaba.dubbo.data.CallDataLogicService" group="#{configproperties.dubbo_group}" />
+	
+	<dubbo:reference id="clientInitQTHandlerService" check="false" interface="com.alibaba.dubbo.data.ClientInitQTHandlerService" group="#{configproperties.dubbo_group}" />
+	
+	<dubbo:reference id="initStationService" check="false" interface="com.alibaba.dubbo.data.InitStationService" group="#{configproperties.dubbo_group}" />
+	<dubbo:reference id="initializeService" check="false" interface="com.alibaba.dubbo.data.InitializeService" group="#{configproperties.dubbo_group}" />
+	
+	
+	<dubbo:reference id="alarmEventService" check="false" interface="com.alibaba.dubbo.data.AlarmEventService" group="#{configproperties.dubbo_group}" >
+	 	<!--  dubbo:method name="SendAlarmEvents" async="true"/-->
+	</dubbo:reference>
+	
+	
+	<!-- 运行报告 -->
+	<dubbo:reference id="reportQueryDataHandlerService" check="false" interface="com.alibaba.dubbo.data.ReportQueryDataHandlerService" group="#{configproperties.dubbo_group}" />
+	
+	<!-- 通用事件计数报表数据 -->
+	<dubbo:reference id="buildReportDataHandlerService" check="false" interface="com.alibaba.dubbo.data.BuildReportDataHandlerService" group="#{configproperties.dubbo_group}" />    
+	
+	<dubbo:reference id="faultArchiveDataHandlerService" check="false" interface="com.alibaba.dubbo.data.FaultArchiveDataHandlerService" group="#{configproperties.dubbo_group}" />
+	
+	<dubbo:reference id="callDataService" check="false" interface="com.alibaba.dubbo.data.CallDataService" group="#{configproperties.dubbo_group}" />
+	<!-- 故障查询服务 -->
+	<dubbo:reference id="queryFaultHandlerService" check="false" interface="com.alibaba.dubbo.data.QueryFaultHandlerService" group="#{configproperties.dubbo_group}" />
+	
+	<!-- 重跑程序配置修改 -->
+	<dubbo:reference id="periodRunSettingDataHandlerService" check="false" interface="com.alibaba.dubbo.data.PeriodRunSettingDataHandlerService" group="#{configproperties.dubbo_group}" />
+	
+	<!-- 重跑程序调用故障归档主逻辑接口 -->
+	<dubbo:reference id="faultReportArchiveReRunService" check="false" interface="com.alibaba.dubbo.data.FaultReportArchiveReRunService" group="#{configproperties.dubbo_group}" />
+	
+	<!-- 审计日志dubbo接口 -->
+	<dubbo:reference id="xtLogBuzDubboService" check="false" interface="com.xjgc.xjap.dubbo.service.XtLogBuzDubboService" group="#{configproperties.dubbo_group}" />
+	
+	<!-- 报表接口 -->
+	<dubbo:reference id="webReportQueryDataHandlerService" check="false" interface="com.alibaba.dubbo.data.WebReportQueryDataHandlerService" group="#{configproperties.dubbo_group}" />
+	
+	<!-- 规则引擎接口-->
+	<dubbo:reference id="qlexpressService" check="false" interface="com.alibaba.dubbo.data.QlexpressService" group="#{configproperties.dubbo_group}" />
+	
+	<!-- 子站巡检接口-->
+	<dubbo:reference id="inspectDataHandlerService" check="false" interface="com.alibaba.dubbo.data.InspectDataHandlerService" group="#{configproperties.dubbo_group}" />
+	
+	<!-- 通用事件机制服务-->
+	<dubbo:reference id="commonEventConfigDataHandlerService" check="false" interface="com.alibaba.dubbo.data.CommonEventConfigDataHandlerService" group="#{configproperties.dubbo_group}" />
+	
+</beans>

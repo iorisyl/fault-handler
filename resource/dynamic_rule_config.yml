@@ -1,0 +1,23 @@
+ listMapSpecial:
+      # 返回property=1
+      - type: action
+        sStationID: 220kV吉阳变
+        sActionName: 录波,告警,启动,PT,CT,过流,过压,过电流,过电压,充电,起动,失败,复归,开入,开出,远,信,判据,电流,电压,功率,异常,测距,返回,失败,TV,断线,通道,同步,满足,采样,扰动,通风
+        operator: equals:sStationID and contains:sActionName
+      - type: action
+        sStationID: 110kV长流变
+        sActionName: 录波,告警,启动,PT,CT,过流,过压,过电流,过电压,充电,起动,失败,复归,开入,开出,远,信,判据,电流,电压,功率,异常,测距,返回,失败,TV,断线,通道,同步,满足,采样,扰动,通风
+        operator: equals:sStationID and contains:sActionName
+      # update tb_pt_alarm_def set property=2 where pt_id like '%110kV东方神华光伏电厂%';
+      # 疑问 什么条件下 才会将property设置成1 或者 0？
+      - type: alarm
+        sStationID: 220kV吉阳变
+        operator:  contains:sStationID
+ listMapCommon:
+     # 返回property=1
+     - type: action
+       sActionName: 录波,告警,启动,PT,CT,过流,过压,过电流,过电压,充电,起动,失败,复归,开入,开出,远,信,判据,电流,电压,功率,异常,测距,返回,失败,TV,断线,通道,同步,满足,采样,扰动,通风
+       operator: 是否包含(actionName,sActionNameMap)
+     - type: alarm
+       sStationID: 220kV吉阳变
+       operator:  contains:sStationID
